@@ -1,0 +1,185 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-python-crud-sample
+
+  SAM Template for sam-python-crud-sample
+
+Globals:
+  Function:
+    Timeout: 60
+
+Parameters:
+  Table:
+    Type: String
+    Default: Activities
+  Region:
+    Type: String
+    Default: us-east-1
+  AWSEnv:
+    Type: String
+    Default: AWS
+
+Resources:
+  CreateActivityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/create_activity/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          TABLE: !Ref Table
+          REGION: !Ref Region
+          AWSENV: !Ref AWSEnv
+      Events:
+        CreateActivities:
+          Type: Api
+          Properties:
+            Path: /activities
+            Method: post
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ActivitiesTable
+  GetActivityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/get_activity/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          TABLE: !Ref Table
+          REGION: !Ref Region
+          AWSENV: !Ref AWSEnv
+      Events:
+        CreateActivities:
+          Type: Api
+          Properties:
+            Path: /activities/{id}
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ActivitiesTable
+  ListActivitiesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/list_activities/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          TABLE: !Ref Table
+          REGION: !Ref Region
+          AWSENV: !Ref AWSEnv
+      Events:
+        CreateActivities:
+          Type: Api
+          Properties:
+            Path: /activities/
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ActivitiesTable
+  UpdateActivityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/update_activity/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          TABLE: !Ref Table
+          REGION: !Ref Region
+          AWSENV: !Ref AWSEnv
+      Events:
+        CreateActivities:
+          Type: Api
+          Properties:
+            Path: /activities/{id}
+            Method: put
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ActivitiesTable
+  DeleteActivityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/delete_activity/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Environment:
+        Variables:
+          TABLE: !Ref Table
+          REGION: !Ref Region
+          AWSENV: !Ref AWSEnv
+      Events:
+        CreateActivities:
+          Type: Api
+          Properties:
+            Path: /activities/{id}/{date}
+            Method: delete
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ActivitiesTable
+  ActivitiesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "id"
+          AttributeType: "S"
+        -
+          AttributeName: "date"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "id"
+          KeyType: "HASH"
+        -
+          AttributeName: "date"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "1"
+        WriteCapacityUnits: "1"
+      TableName: "Activities"
+
+Outputs:
+  ActivitiesApi:
+    Description: "API Gateway endpoint URL for Prod stage for Create Activity Function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/activities/"
+  CreateActivityFunction:
+    Description: "Create Activity Lambda Function ARN"
+    Value: !GetAtt CreateActivityFunction.Arn
+  CreateActivityFunctionIamRole:
+    Description: "Implicit IAM Role created for Create Activity function"
+    Value: !GetAtt CreateActivityFunctionRole.Arn
+  GetActivityFunction:
+    Description: "Get Activity Lambda Function ARN"
+    Value: !GetAtt GetActivityFunction.Arn
+  GetActivityFunctionIamRole:
+    Description: "Implicit IAM Role created for Get Activity function"
+    Value: !GetAtt GetActivityFunctionRole.Arn
+  ListActivitiesFunction:
+    Description: "List Activities Lambda Function ARN"
+    Value: !GetAtt ListActivitiesFunction.Arn
+  ListActivitiesFunctionIamRole:
+    Description: "Implicit IAM Role created for List Activities function"
+    Value: !GetAtt ListActivitiesFunctionRole.Arn
+  UpdateActivityFunction:
+    Description: "Update Activity Lambda Function ARN"
+    Value: !GetAtt UpdateActivityFunction.Arn
+  UpdateActivityFunctionIamRole:
+    Description: "Implicit IAM Role created for Update Activity function"
+    Value: !GetAtt UpdateActivityFunctionRole.Arn
+  DeleteActivityFunction:
+    Description: "Delete Activity Lambda Function ARN"
+    Value: !GetAtt DeleteActivityFunction.Arn
+  DeleteActivityFunctionIamRole:
+    Description: "Implicit IAM Role created for Delete Activity function"
+    Value: !GetAtt DeleteActivityFunctionRole.Arn
+  ActivitiesTable:
+    Description: "DynamoDB Table"
+    Value: !Ref ActivitiesTable
+  ActivitiesTableArn:
+    Description: "DynamoDB Table ARN"
+    Value: !GetAtt ActivitiesTable.Arn

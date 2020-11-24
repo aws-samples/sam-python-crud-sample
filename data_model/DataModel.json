@@ -1,0 +1,27 @@
+{
+  "ModelName": "ActivitiesModel",
+  "ModelMetadata": {
+    "Author": "",
+    "DateCreated": "Dec 23, 2019, 7:12 PM",
+    "DateLastModified": "Dec 23, 2019, 7:13 PM",
+    "Description": ""
+  },
+  "DataModel": [
+    {
+      "TableName": "Activities",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "id",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "date",
+          "AttributeType": "S"
+        }
+      },
+      "DataAccess": {
+        "MySql": {}
+      }
+    }
+  ]
+}

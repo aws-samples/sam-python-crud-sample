@@ -1,0 +1,54 @@
+{
+  "version": "2.0.0",
+  "command": "bash",
+  "options": {
+    "cwd": "${workspaceRoot}"
+  },
+  "args": [
+    "-c"
+  ],
+  "tasks": [
+    {
+      "label": "venv",
+      "type": "shell",
+      "args": [
+        "make venv"
+      ]
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "args": [
+        "make test"
+      ]
+    },
+    {
+      "label": "deploy",
+      "type": "shell",
+      "args": [
+        "make deploy"
+      ]
+    },
+    {
+      "label": "help",
+      "type": "shell",
+      "args": [
+        "make help"
+      ]
+    },
+    {
+      "label": "clean",
+      "type": "shell",
+      "args": [
+        "make clean"
+      ]
+    },
+    {
+      "label": "fullclean",
+      "type": "shell",
+      "args": [
+        "make fullclean"
+      ]
+    }
+  ]
+}
