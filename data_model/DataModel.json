@@ -4,7 +4,9 @@
     "Author": "",
     "DateCreated": "Dec 23, 2019, 7:12 PM",
     "DateLastModified": "Dec 23, 2019, 7:13 PM",
-    "Description": ""
+    "Description": "",
+    "AWSService": "Amazon DynamoDB",
+    "Version": "3.0"
   },
   "DataModel": [
     {
@@ -21,6 +23,33 @@
       },
       "DataAccess": {
         "MySql": {}
+      },
+      "BillingMode": "PROVISIONED",
+      "ProvisionedCapacitySettings": {
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        },
+        "AutoScalingRead": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 10,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 70
+          }
+        },
+        "AutoScalingWrite": {
+          "ScalableTargetRequest": {
+            "MinCapacity": 1,
+            "MaxCapacity": 10,
+            "ServiceRole": "AWSServiceRoleForApplicationAutoScaling_DynamoDBTable"
+          },
+          "ScalingPolicyConfiguration": {
+            "TargetValue": 70
+          }
+        }
       }
     }
   ]
